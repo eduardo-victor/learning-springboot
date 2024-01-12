@@ -16,6 +16,9 @@ public class CarModel extends RepresentationModel<CarModel> implements Serializa
     private UUID idCar;
     private String brand;
     private String model;
+
+    private String image;
+
     private Integer year;
     private Integer horsepower;
 
@@ -57,5 +60,14 @@ public class CarModel extends RepresentationModel<CarModel> implements Serializa
 
     public void setHorsepower(Integer horsepower) {
         this.horsepower = horsepower;
+    }
+
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
