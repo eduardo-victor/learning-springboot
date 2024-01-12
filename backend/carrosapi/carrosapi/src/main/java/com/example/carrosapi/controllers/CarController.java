@@ -10,11 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class CarController {
@@ -31,7 +32,14 @@ public class CarController {
 
     @GetMapping("/cars")
     public ResponseEntity<List<CarModel>> getAllCars(){
-        return ResponseEntity.status(HttpStatus.OK).body(carRepository.findAll());
+        List<CarModel> carsList = carRepository.findAll();
+        if(!carsList.isEmpty()){
+            for (CarModel car : carsList){
+                UUID id = car.getIdCar();
+                car.add(linkTo(methodOn(CarController.class).getOneCar(id)).withSelfRel());
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(carsList);
     }
 
     @GetMapping("/cars/{id}")
@@ -40,6 +48,7 @@ public class CarController {
         if(carO.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not found in our database.");
         }
+        carO.get().add(linkTo(methodOn(CarController.class).getAllCars()).withRel("Cars List"));
         return ResponseEntity.status(HttpStatus.OK).body(carO.get());
     }
 
