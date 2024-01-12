@@ -35,11 +35,25 @@ public class CarController {
     }
 
     @GetMapping("/cars/{id}")
-    public ResponseEntity<Object> getOneProduct(@PathVariable(value="id")UUID id){
+    public ResponseEntity<Object> getOneCar(@PathVariable(value="id")UUID id){
         Optional<CarModel> carO = carRepository.findById(id);
         if(carO.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not found in our database.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(carO.get());
     }
+
+    @PutMapping("/cars/{id}")
+    public ResponseEntity<Object> updateCar(@PathVariable(value = "id") UUID id,
+                                            @RequestBody @Valid CarRecordDto carRecordDto){
+        Optional<CarModel> carO = carRepository.findById(id);
+        if(carO.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not found in our database");
+        }
+        var carModel = carO.get();
+        BeanUtils.copyProperties(carRecordDto, carModel);
+        return ResponseEntity.status(HttpStatus.OK).body(carRepository.save(carModel));
+    }
+
+
 }
