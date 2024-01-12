@@ -55,5 +55,13 @@ public class CarController {
         return ResponseEntity.status(HttpStatus.OK).body(carRepository.save(carModel));
     }
 
-
+    @DeleteMapping("/cars/{id}")
+    public ResponseEntity<Object> deleteCar(@PathVariable(value = "id")UUID id){
+        Optional<CarModel> carO = carRepository.findById(id);
+        if(carO.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not found in our database");
+        }
+        carRepository.delete(carO.get());
+        return ResponseEntity.status(HttpStatus.OK).body("Car deleted successfully");
+    }
 }
