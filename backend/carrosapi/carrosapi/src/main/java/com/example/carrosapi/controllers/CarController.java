@@ -23,6 +23,7 @@ public class CarController {
     @Autowired
     CarRepository carRepository;
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/addcars")
     public ResponseEntity<CarModel> saveCar(@RequestBody @Valid CarRecordDto carRecordDto) {
         var carModel = new CarModel();
@@ -30,6 +31,7 @@ public class CarController {
         return ResponseEntity.status(HttpStatus.CREATED).body(carRepository.save(carModel));
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/cars")
     public ResponseEntity<List<CarModel>> getAllCars(){
         List<CarModel> carsList = carRepository.findAll();
@@ -42,6 +44,7 @@ public class CarController {
         return ResponseEntity.status(HttpStatus.OK).body(carsList);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/cars/{id}")
     public ResponseEntity<Object> getOneCar(@PathVariable(value="id")UUID id){
         Optional<CarModel> carO = carRepository.findById(id);
@@ -52,6 +55,7 @@ public class CarController {
         return ResponseEntity.status(HttpStatus.OK).body(carO.get());
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping("/cars/{id}")
     public ResponseEntity<Object> updateCar(@PathVariable(value = "id") UUID id,
                                             @RequestBody @Valid CarRecordDto carRecordDto){
@@ -64,6 +68,7 @@ public class CarController {
         return ResponseEntity.status(HttpStatus.OK).body(carRepository.save(carModel));
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/cars/{id}")
     public ResponseEntity<Object> deleteCar(@PathVariable(value = "id")UUID id){
         Optional<CarModel> carO = carRepository.findById(id);
